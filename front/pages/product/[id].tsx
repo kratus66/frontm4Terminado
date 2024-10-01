@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';  // Botón para regresar al home
 import Image from 'next/image';
-import IProduct from "../../interface/IProduct";
+import IProduct from "../../src/interface/IProduct";
 import { FaShoppingCart } from 'react-icons/fa'; // Icono del carrito para el popup
 
 function ProductDetailPage() {

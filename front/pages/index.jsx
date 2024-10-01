@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import GetProducts from "../components/GetProducts/GetProducts";
+import GetProducts from "../src/components/GetProducts/GetProducts";
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';

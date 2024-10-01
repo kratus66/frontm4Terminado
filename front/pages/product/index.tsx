@@ -1,4 +1,4 @@
-import GetProductsShop from "../../components/GetProducts/getProducts";
+import GetProductsShop from "../../src/components/GetProducts/getProducts";
 
 function ProductPage() {
   return (
