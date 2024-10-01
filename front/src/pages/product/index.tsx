@@ -1,11 +1,11 @@
-import GetProducts from "../../components/GetProducts/getProducts";
+import GetProductsShop from "../../components/GetProducts/getProducts";
 
 function ProductPage() {
   return (
     <div>
       <h1>Todos los productos</h1>
       {/* Renderizamos todos los productos utilizando el componente GetProducts */}
-      <GetProducts />
+      <GetProductsShop />
     </div>
   );
 }
