@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
 import IProduct from "../../interface/IProduct";
 import { getProductService } from "../../service/productService";
-import Link from 'next/link';  // Importar Link de Next.js
-import { FaShoppingCart } from 'react-icons/fa'; // Icono del carrito para la animación
-import Image from 'next/image'; // Importar Image de Next.js para optimización
+import Link from 'next/link';  
+import { FaShoppingCart } from 'react-icons/fa'; 
+import Image from 'next/image'; 
 
 interface GetProductsProps {
   onCartUpdate?: (count: number) => void;
+  onProductLoad?: (products: IProduct[]) => void; // Nuevo prop para cargar imágenes en el carrusel
 }
 
-const GetProducts: React.FC<GetProductsProps> = ({ onCartUpdate }) => {
+const GetProducts: React.FC<GetProductsProps> = ({ onCartUpdate, onProductLoad }) => {
   const [products, setProducts] = useState<IProduct[]>([]);
   const [cart, setCart] = useState<IProduct[]>([]);
   const [cartCount, setCartCount] = useState(0);
@@ -17,6 +18,7 @@ const GetProducts: React.FC<GetProductsProps> = ({ onCartUpdate }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [isPopupVisible, setPopupVisible] = useState(false); // Estado para mostrar el popup
 
+  // Evitar el renderizado constante
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -24,8 +26,13 @@ const GetProducts: React.FC<GetProductsProps> = ({ onCartUpdate }) => {
         console.log("Fetching products from:", url);
 
         const data = await getProductService(url);
-        console.log("Productos recibidos: ", data);  // <-- Aquí debes ver los productos
+        console.log("Productos recibidos: ", data);  
         setProducts(data);
+
+        // Pasar los productos a LandingPage a través de onProductLoad
+        if (onProductLoad) {
+          onProductLoad(data);
+        }
       } catch (error: any) {
         console.error("Error al obtener productos:", error.message);
         setError(error.message);
@@ -45,7 +52,7 @@ const GetProducts: React.FC<GetProductsProps> = ({ onCartUpdate }) => {
     } else {
       console.warn("onCartUpdate no está definido o no es una función");
     }
-  }, [onCartUpdate]);
+  }, []); // Solo ejecuta useEffect una vez al montar el componente
 
   const addToCart = (product: IProduct) => {
     const token = localStorage.getItem("token");
@@ -96,12 +103,12 @@ const GetProducts: React.FC<GetProductsProps> = ({ onCartUpdate }) => {
           <div key={product.id} className="bg-white shadow-md rounded-lg p-4 m-2 hover:shadow-xl hover:scale-105 transform transition-transform transition-shadow duration-300">
             <h1 className="text-xl font-bold mb-2">{product.name}</h1>
             <Link href={`/product/${product.id}`}>
-            <Image
+              <Image
                 src={product.image}
                 alt={product.name}
-                width={500} // Asegúrate de ajustar el tamaño adecuado
-                height={500}
-                className="w-full h-auto rounded-lg mb-2"
+                width={300} // Ajuste de tamaño para que no desborden
+                height={300}
+                className="w-full h-auto object-cover rounded-lg mb-2" // `object-cover` para asegurarse que las imágenes no desborden
                 priority={true} // Usar `priority` para imágenes importantes
               />
               <h3 className="text-lg font-semibold mt-2">Precio: ${product.price}</h3>
@@ -130,4 +137,3 @@ const GetProducts: React.FC<GetProductsProps> = ({ onCartUpdate }) => {
 };
 
 export default GetProducts;
-
